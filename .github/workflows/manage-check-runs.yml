@@ -6,9 +6,10 @@ on:
 
 jobs:
 
-  on-workflow-request:
+  on-workflow-requested:
+    name: On Workflow Requested
     runs-on: ubuntu-latest
-    if: github.event_name == 'requested'
+    if: github.event.action == 'requested'
 
     steps:
       - name: Create CI Check
@@ -21,3 +22,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          
+  on-workflow-completed:
+    name: On Workflow Completed
+    runs-on: ubuntu-latest
+    if: github.event.action == 'completed'
+
+    steps:
+      - name: Debug Output
+        run: echo "${{ github.ervent }}"
