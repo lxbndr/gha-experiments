@@ -1,22 +1,14 @@
-name: CII
+name: CI2
 
 on:
-  workflow_run:
   workflow_dispatch:
 
 jobs:
-
-  on-workflow-request:
+  build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'requested'
 
     steps:
-      - name: Create CI Check
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /repos/{repository}/check-runs
-          repository: ${{ github.repository }}
-          name: zlib
-          head_sha: ${{ github.event.workflow_run.head_sha }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+
+      - name: Run a one-line script
+        run: echo Hello, world!
