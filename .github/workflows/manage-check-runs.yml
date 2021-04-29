@@ -1,10 +1,10 @@
-name: Manage Check Runs
+name: manage-check-runs
 
 on:
   workflow_run:
 
 jobs:
-  
+
   on-workflow-request:
     runs-on: ubuntu-latest
     if: github.event_name == 'requested'
