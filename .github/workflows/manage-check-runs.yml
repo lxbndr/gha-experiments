@@ -2,6 +2,7 @@ name: CII
 
 on:
   workflow_run:
+  workflow_dispatch:
 
 jobs:
 
