@@ -1,4 +1,4 @@
-name: manage-check-runs
+name: CII
 
 on:
   workflow_run:
