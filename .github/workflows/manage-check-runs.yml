@@ -42,4 +42,3 @@ jobs:
         run: |
           echo "${{ toJSON(github.event) }}"
           echo "${{ toJSON(steps.get-checks.data) }}"
-          echo "${{ toJSON(github.event) }}"
