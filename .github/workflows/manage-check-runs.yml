@@ -39,4 +39,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Debug Output
-        run: echo "${{ toJSON(steps.get-checks.data) }}"
+        run: echo "${{ steps.get-checks.outputs.data }}"
