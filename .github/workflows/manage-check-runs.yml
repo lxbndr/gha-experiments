@@ -17,7 +17,7 @@ jobs:
         with:
           route: POST /repos/{repository}/check-runs
           repository: ${{ github.repository }}
-          name: zlib
+          name: SOME CHECK
           head_sha: ${{ github.event.workflow_run.head_sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -28,5 +28,18 @@ jobs:
     if: github.event.action == 'completed'
 
     steps:
+      - name: Get Checks
+        id: get-checks
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{repository}/commits/{ref}/check-runs
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.workflow_run.head_sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Debug Output
-        run: echo "${{ toJSON(github.event) }}"
+        run: |
+          echo "${{ toJSON(github.event) }}"
+          echo "${{ toJSON(steps.get-checks.data) }}"
+          echo "${{ toJSON(github.event) }}"
