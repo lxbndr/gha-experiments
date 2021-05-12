@@ -45,6 +45,6 @@ jobs:
           repository: ${{ github.repository }}
           workflow_id: ci.yml
           ref:  ${{ steps.detect-target-ref.outputs.target-ref }}
-          inputs: '{ "check-run-id": "${{ fromJson(steps.fetch-pr-info.outputs.data).id}}" }'
+          inputs: '{ "check-run-id": "${{ fromJson(steps.fetch-pr-info.outputs.data).id }}" }'
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
