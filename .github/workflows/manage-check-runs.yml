@@ -41,22 +41,33 @@ jobs:
           head_sha: ${{ github.event.workflow_run.head_sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+  on-workflow-completed:
+    name: On Workflow Completed
+    runs-on: ubuntu-latest
+    if: github.event.action == 'completed'
+
+    steps:
+      - name: Get Checks
+        id: get-checks
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{repository}/commits/{ref}/check-runs
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.workflow_run.head_sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Debug Output
+        run: echo "${{ steps.get-checks.outputs.data }}"
+
+      - name: Update CI Check
+        uses: octokit/request-action@v2.x
+        with:
+          route: PATCH /repos/{repository}/check-runs/${{ steps.get-checks.outputs.data[0].id }}
+          repository: ${{ github.repository }}
+          status: completed
+          conclusion: success
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          
-#   on-workflow-completed:
-#     name: On Workflow Completed
-#     runs-on: ubuntu-latest
-#     if: github.event.action == 'completed'
-
-#     steps:
-#       - name: Get Checks
-#         id: get-checks
-#         uses: octokit/request-action@v2.x
-#         with:
-#           route: GET /repos/{repository}/commits/{ref}/check-runs
-#           repository: ${{ github.repository }}
-#           ref: ${{ github.event.workflow_run.head_sha }}
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#       - name: Debug Output
-#         run: echo "${{ steps.get-checks.outputs.data }}"
