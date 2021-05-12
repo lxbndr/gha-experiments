@@ -12,33 +12,34 @@ jobs:
     if: github.event.action == 'requested'
 
     steps:
-      - name: Create CI Check Suite
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /repos/{repository}/check-suites
-          repository: ${{ github.repository }}
-          name: CI
-          head_sha: ${{ github.event.workflow_run.head_sha }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: LouisBrunner/checks-action@v1.1.1
-        if: always()
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: Test XYZ
-          status: queued
-          sha: ${{ github.event.workflow_run.head_sha }}
-
-#       - name: Create CI Check
+#       - name: Create CI Check Suite
 #         uses: octokit/request-action@v2.x
 #         with:
-#           route: POST /repos/{repository}/check-runs
+#           route: POST /repos/{repository}/check-suites
 #           repository: ${{ github.repository }}
-#           name: SOME CHECK
+#           name: CI
 #           head_sha: ${{ github.event.workflow_run.head_sha }}
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#       - uses: LouisBrunner/checks-action@v1.1.1
+#         if: always()
+#         with:
+#           token: ${{ secrets.GITHUB_TOKEN }}
+#           name: Test XYZ
+#           status: queued
+#           sha: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Create CI Check
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{repository}/check-runs
+          repository: ${{ github.repository }}
+          name: SOME CHECK
+          external_id: some_id
+          head_sha: ${{ github.event.workflow_run.head_sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          
 #   on-workflow-completed:
 #     name: On Workflow Completed
