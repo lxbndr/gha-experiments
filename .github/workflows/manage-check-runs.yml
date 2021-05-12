@@ -18,6 +18,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: Test XYZ
           status: queued
+          sha: ${{ github.event.workflow_run.head_sha }}
 #       - name: Create CI Check Suite
 #         uses: octokit/request-action@v2.x
 #         with:
