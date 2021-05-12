@@ -37,3 +37,14 @@ jobs:
           head_sha: ${{ steps.detect-target-ref.outputs.target-sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Trigger CI Workflow
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{repository}/actions/workflows/{workflow_id}/dispatches
+          repository: ${{ github.repository }}
+          workflow_id: ci.yml
+          ref:  ${{ steps.detect-target-ref.outputs.target-ref }}
+          inputs: '{ "check-run-id": "${{ fromJson(steps.fetch-pr-info.outputs.data).id}}" }'
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
