@@ -12,41 +12,47 @@ jobs:
     if: github.event.action == 'requested'
 
     steps:
-      - name: Create CI Check Suite
-        uses: octokit/request-action@v2.x
+      - uses: LouisBrunner/checks-action@v1.1.1
+        if: always()
         with:
-          route: POST /repos/{repository}/check-suites
-          repository: ${{ github.repository }}
-          name: CI
-          head_sha: ${{ github.event.workflow_run.head_sha }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Test XYZ
+          status: queued
+#       - name: Create CI Check Suite
+#         uses: octokit/request-action@v2.x
+#         with:
+#           route: POST /repos/{repository}/check-suites
+#           repository: ${{ github.repository }}
+#           name: CI
+#           head_sha: ${{ github.event.workflow_run.head_sha }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create CI Check
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /repos/{repository}/check-runs
-          repository: ${{ github.repository }}
-          name: SOME CHECK
-          head_sha: ${{ github.event.workflow_run.head_sha }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Create CI Check
+#         uses: octokit/request-action@v2.x
+#         with:
+#           route: POST /repos/{repository}/check-runs
+#           repository: ${{ github.repository }}
+#           name: SOME CHECK
+#           head_sha: ${{ github.event.workflow_run.head_sha }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          
-  on-workflow-completed:
-    name: On Workflow Completed
-    runs-on: ubuntu-latest
-    if: github.event.action == 'completed'
+#   on-workflow-completed:
+#     name: On Workflow Completed
+#     runs-on: ubuntu-latest
+#     if: github.event.action == 'completed'
 
-    steps:
-      - name: Get Checks
-        id: get-checks
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/{repository}/commits/{ref}/check-runs
-          repository: ${{ github.repository }}
-          ref: ${{ github.event.workflow_run.head_sha }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     steps:
+#       - name: Get Checks
+#         id: get-checks
+#         uses: octokit/request-action@v2.x
+#         with:
+#           route: GET /repos/{repository}/commits/{ref}/check-runs
+#           repository: ${{ github.repository }}
+#           ref: ${{ github.event.workflow_run.head_sha }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug Output
-        run: echo "${{ steps.get-checks.outputs.data }}"
+#       - name: Debug Output
+#         run: echo "${{ steps.get-checks.outputs.data }}"
