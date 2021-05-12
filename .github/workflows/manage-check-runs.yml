@@ -59,12 +59,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Debug Output
-        run: echo "${{ steps.get-checks.outputs.data }}"
+        run: echo "${{ fromJSON(steps.get-checks.outputs.data).check_runs[0].id }}"
 
       - name: Update CI Check
         uses: octokit/request-action@v2.x
         with:
-          route: PATCH /repos/{repository}/check-runs/${{ steps.get-checks.outputs.data.check_runs[0].id }}
+          route: PATCH /repos/{repository}/check-runs/${{ fromJSON(steps.get-checks.outputs.data).check_runs[0].id }}
           repository: ${{ github.repository }}
           status: completed
           conclusion: success
