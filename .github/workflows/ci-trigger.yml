@@ -1,0 +1,39 @@
+name: CI Trigger
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+
+  trigger-workflow:
+    runs-on: ubuntu-latest
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/ci test')
+
+    steps:
+      - name: Fetch Pull Request Info
+        id: fetch-pr-info
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{repository}/pulls/{pull_number}
+          repository: ${{ github.repository }}
+          pull_number: ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Detect Target Ref
+        id: detect-target-ref
+        run: |
+          echo "::set-output name=target-ref::${{ fromJson(steps.fetch-pr-info.outputs.data).head.ref }}"
+          echo "::set-output name=target-sha::${{ fromJson(steps.fetch-pr-info.outputs.data).head.sha }}"
+
+      - name: Create CI Check
+        id: ci-check
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{repository}/check-runs
+          repository: ${{ github.repository }}
+          name: CI_CHECK
+          head_sha: ${{ steps.detect-target-ref.outputs.target-sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
