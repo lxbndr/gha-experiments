@@ -2,6 +2,9 @@ name: CI
 
 on:
   workflow_dispatch:
+    inputs:
+      check_run_id:
+        required: false
 
 jobs:
   build:
