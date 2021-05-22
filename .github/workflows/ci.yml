@@ -33,7 +33,7 @@ jobs:
 
       - name: Run a one-line script
         run: |
-          echo "${{ setps.get-checks.output.data }}"
+          echo "${{ steps.get-checks.output.data }}"
           sleep 15
 
       - name: Update CI Check
