@@ -21,19 +21,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Get Checks
+      - name: Get Current Check
         id: get-checks
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/{repository}/commits/{ref}/check-runs
+          route: GET /repos/{repository}/commits/{ref}/check-runs/{check-run-id}
           repository: ${{ github.repository }}
           ref: ${{ github.event.ref }}
+          check-run-id: ${{ github.run_id }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run a one-line script
         run: |
-          echo "${{ steps.get-checks.output.data }}"
+          echo "External ID: ${{ fromJSON(steps.get-checks.output.data).external_id }}"
           sleep 15
 
       - name: Update CI Check
