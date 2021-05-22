@@ -23,9 +23,19 @@ jobs:
 
       - name: Run a one-line script
         run: |
-          echo "Check run id: ${{ github.event.inputs.check-run-id }}"
+          echo ${{ toJSON(github.event) }}
           sleep 15
-          
+      
+      - name: Get Checks
+        id: get-checks
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{repository}/commits/{ref}/check-runs
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.workflow_run.head_sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Update CI Check
         if: github.event.inputs.check-run-id
         uses: octokit/request-action@v2.x
