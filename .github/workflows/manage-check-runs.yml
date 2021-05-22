@@ -12,6 +12,8 @@ jobs:
     if: github.event.action == 'requested'
 
     steps:
+      - run: echo ${{ toJSON(github.event) }}
+
       - name: Create CI Check Suite
         uses: octokit/request-action@v2.x
         with:
