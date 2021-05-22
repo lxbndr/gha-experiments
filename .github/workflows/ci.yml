@@ -3,7 +3,7 @@ name: CI
 on:
   workflow_dispatch:
     inputs:
-      check_run_id:
+      check-run-id:
         required: false
 
 jobs:
