@@ -12,6 +12,7 @@ jobs:
 
     steps:
       - name: Update CI Check
+        if: github.event.inputs.check-run-id
         uses: octokit/request-action@v2.x
         with:
           route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
@@ -26,6 +27,7 @@ jobs:
           sleep 15
           
       - name: Update CI Check
+        if: github.event.inputs.check-run-id
         uses: octokit/request-action@v2.x
         with:
           route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
