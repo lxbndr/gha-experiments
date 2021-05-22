@@ -25,7 +25,7 @@ jobs:
         id: get-checks
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/{repository}/commits/{ref}/check-runs/{check-run-id}
+          route: GET /repos/{repository}/check-runs/{check-run-id}
           repository: ${{ github.repository }}
           ref: ${{ github.event.ref }}
           check-run-id: ${{ github.run_id }}
