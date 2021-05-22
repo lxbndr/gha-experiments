@@ -20,11 +20,6 @@ jobs:
           status: in_progress
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run a one-line script
-        run: |
-          echo ${{ toJSON(github.event) }}
-          sleep 15
       
       - name: Get Checks
         id: get-checks
@@ -32,9 +27,14 @@ jobs:
         with:
           route: GET /repos/{repository}/commits/{ref}/check-runs
           repository: ${{ github.repository }}
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event.ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run a one-line script
+        run: |
+          echo "${{ setps.get-checks.output.data }}"
+          sleep 15
 
       - name: Update CI Check
         if: github.event.inputs.check-run-id
