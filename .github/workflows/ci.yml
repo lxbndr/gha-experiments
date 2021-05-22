@@ -48,7 +48,7 @@ jobs:
           
       - name: Run a one-line script
         run: |
-          echo "${{ steps.get-checks.output.data }}"
+          echo "${{ fromJSON(steps.get-checks.output.data)[3].external_id }}"
           
       - name: Update CI Check
         if: github.event.inputs.check-run-id
