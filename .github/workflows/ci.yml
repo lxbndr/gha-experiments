@@ -48,7 +48,7 @@ jobs:
   check-out:
     name: Check Out
     runs-on: ubuntu-latest
-    if: github.event.inputs.check-run-id
+    if: github.event.inputs.check-run-id || cancelled()
     needs: [build]
     
     steps:
