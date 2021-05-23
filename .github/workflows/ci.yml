@@ -7,12 +7,13 @@ on:
         required: false
 
 jobs:
-  build:
+  check-in:
+    name: Check In
     runs-on: ubuntu-latest
+    if: github.event.inputs.check-run-id
 
     steps:
       - name: Get Current Run
-        if: github.event.inputs.check-run-id
         id: get-run
         uses: octokit/request-action@v2.x
         with:
@@ -21,9 +22,8 @@ jobs:
           run_id: ${{ github.run_id }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Update CI Check
-        if: github.event.inputs.check-run-id
         uses: octokit/request-action@v2.x
         with:
           route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
@@ -32,14 +32,25 @@ jobs:
           details_url: ${{ fromJSON(steps.get-run.outputs.data).html_url }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [check-in]
+    steps:
       - name: Run a one-line script
         run: |
           echo "Working"
           sleep 15
-      
+
+  check-out:
+    name: Check Out
+    runs-on: ubuntu-latest
+    if: github.event.inputs.check-run-id
+    needs: [build]
+    
+    steps:
       - name: Update CI Check
-        if: github.event.inputs.check-run-id
         uses: octokit/request-action@v2.x
         with:
           route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
