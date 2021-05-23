@@ -51,12 +51,33 @@ jobs:
     needs: [build]
     
     steps:
-      - name: Update CI Check
+      - name: Update CI Check - Success
+        if: success()
         uses: octokit/request-action@v2.x
         with:
           route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
           repository: ${{ github.repository }}
           status: completed
           conclusion: success
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update CI Check - Failure
+        if: failure()
+        uses: octokit/request-action@v2.x
+        with:
+          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
+          repository: ${{ github.repository }}
+          status: completed
+          conclusion: success
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update CI Check - Cancelled
+        if: cancelled()
+        uses: octokit/request-action@v2.x
+        with:
+          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
+          repository: ${{ github.repository }}
+          status: completed
+          conclusion: cancelled
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
