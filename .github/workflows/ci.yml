@@ -80,12 +80,12 @@ jobs:
   check-out:
     name: Check Out
     runs-on: ubuntu-latest
-    if: github.event.inputs.check-run-id && (failure() || cancelled() || success())
+    if: github.event.inputs.check-run-id && always()
     needs: [test]
     
     steps:
       - name: Update CI Check - Success
-        if: success()
+        if: success() && needs.test.outputs.job_status == success
         uses: octokit/request-action@v2.x
         with:
           route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
