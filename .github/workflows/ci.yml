@@ -37,6 +37,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs: [check-in]
+    if: always()
     steps:
       - name: Run a one-line script
         run: |
