@@ -27,7 +27,7 @@ jobs:
         with:
           route: GET /repos/{repository}/actions/runs/{run_id}
           repository: ${{ github.repository }}
-          check-run-id: ${{ github.run_id }}
+          run-id: ${{ github.run_id }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
