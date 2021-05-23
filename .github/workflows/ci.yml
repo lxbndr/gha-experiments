@@ -11,17 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Update CI Check
-        if: github.event.inputs.check-run-id
-        uses: octokit/request-action@v2.x
-        with:
-          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
-          repository: ${{ github.repository }}
-          status: in_progress
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
       - name: Get Current Run
+        if: github.event.inputs.check-run-id
         id: get-run
         uses: octokit/request-action@v2.x
         with:
@@ -31,24 +22,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Get Checks
-        id: get-checks
+      - name: Update CI Check
+        if: github.event.inputs.check-run-id
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/{repository}/commits/{ref}/check-runs
+          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
           repository: ${{ github.repository }}
-          ref: ${{ github.event.ref }}
+          status: in_progress
+          details_url: ${{ fromJSON(steps.get-run.outputs.data).html_url }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      
       - name: Run a one-line script
         run: |
-          echo "run ID: ${{ github.run_id }}"
-          
-      - name: Run a one-line script
-        run: |
-          echo "${{ fromJSON(steps.get-checks.outputs.data).check_runs[2].external_id }}"
-          
+          echo "Working"
+          sleep 15
+      
       - name: Update CI Check
         if: github.event.inputs.check-run-id
         uses: octokit/request-action@v2.x
@@ -57,6 +46,5 @@ jobs:
           repository: ${{ github.repository }}
           status: completed
           conclusion: success
-          external_id: ${{ fromJSON(steps.get-checks.outputs.data).check_runs[2].external_id }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
