@@ -21,16 +21,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-#       - name: Get Current Check
-#         id: get-check
-#         uses: octokit/request-action@v2.x
-#         with:
-#           route: GET /repos/{repository}/check-runs/{check-run-id}
-#           repository: ${{ github.repository }}
-#           ref: ${{ github.event.ref }}
-#           check-run-id: ${{ github.run_id }}
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get Current Run
+        id: get-run
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{repository}/actions/runs/{run_id}
+          repository: ${{ github.repository }}
+          check-run-id: ${{ github.run_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Get Checks
         id: get-checks
