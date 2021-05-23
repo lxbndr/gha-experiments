@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       check-run-id:
+        description: Check Run ID
         required: false
 
 jobs:
