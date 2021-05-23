@@ -58,5 +58,6 @@ jobs:
           repository: ${{ github.repository }}
           status: completed
           conclusion: success
+          external_id: ${{ fromJSON(steps.get-checks.outputs.data).check_runs[2].external_id
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
