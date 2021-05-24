@@ -81,13 +81,13 @@ jobs:
     name: Check Out
     runs-on: ubuntu-latest
     if: github.event.inputs.check-run-id && always()
-    needs: [test]
+    needs: [build, test]
     
     steps:
       - name: Print Job Status
         run: |
-          echo "${{ jobs.build.outputs.job_status }}"
-          echo "${{ jobs.test.outputs.job_status }}"
+          echo "${{ needs.build.outputs.job_status }}"
+          echo "${{ needs.test.outputs.job_status }}"
 
       - name: Update CI Check - Success
         uses: octokit/request-action@v2.x
