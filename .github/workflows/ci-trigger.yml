@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Fetch Pull Request Info
-        id: fetch-pr-info
+        id: fetch_pr
         uses: octokit/request-action@v2.x
         with:
           route: GET /repos/{repository}/pulls/{pull_number}
@@ -21,20 +21,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Detect Target Ref
-        id: detect-target-ref
-        run: |
-          echo "::set-output name=target-ref::${{ fromJson(steps.fetch-pr-info.outputs.data).head.ref }}"
-          echo "::set-output name=target-sha::${{ fromJson(steps.fetch-pr-info.outputs.data).head.sha }}"
-
       - name: Create CI Check
-        id: ci-check
+        id: create_check
         uses: octokit/request-action@v2.x
         with:
           route: POST /repos/{repository}/check-runs
           repository: ${{ github.repository }}
-          name: CI_CHECK
-          head_sha: ${{ steps.detect-target-ref.outputs.target-sha }}
+          name: CI
+          head_sha: ${{ fromJson(steps.fetch_pr.outputs.data).head.sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
@@ -44,7 +38,7 @@ jobs:
           route: POST /repos/{repository}/actions/workflows/{workflow_id}/dispatches
           repository: ${{ github.repository }}
           workflow_id: ci.yml
-          ref:  ${{ steps.detect-target-ref.outputs.target-ref }}
-          inputs: '{ "check-run-id": "${{ fromJson(steps.ci-check.outputs.data).id }}" }'
+          ref:  ${{ fromJson(steps.fetch_pr.outputs.data).head.ref }}
+          inputs: '{ "check_run_id": "${{ fromJson(steps.create_check.outputs.data).id }}" }'
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
