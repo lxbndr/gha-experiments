@@ -21,16 +21,6 @@ jobs:
             && echo "::set-output name=head_sha::$HEAD_SHA" \
             && echo "::set-output name=head_ref::$HEAD_REF"
 
-      - name: Fetch Pull Request Info
-        id: fetch_pr
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/{repository}/pulls/{pull_number}
-          repository: ${{ github.repository }}
-          pull_number: ${{ github.event.issue.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create CI Check
         id: create_check
         uses: octokit/request-action@v2.x
@@ -38,7 +28,7 @@ jobs:
           route: POST /repos/{repository}/check-runs
           repository: ${{ github.repository }}
           name: CI
-          head_sha: ${{ fromJson(steps.fetch_pr.outputs.data).head.sha }}
+          head_sha: ${{ steps.get_pr.outputs.head_sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
@@ -48,7 +38,7 @@ jobs:
           route: POST /repos/{repository}/actions/workflows/{workflow_id}/dispatches
           repository: ${{ github.repository }}
           workflow_id: ci.yml
-          ref:  ${{ fromJson(steps.fetch_pr.outputs.data).head.ref }}
+          ref:  ${{ steps.get_pr.outputs.head_ref }}
           inputs: '{ "check_run_id": "${{ fromJson(steps.create_check.outputs.data).id }}" }'
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
