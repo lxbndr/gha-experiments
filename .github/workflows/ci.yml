@@ -91,6 +91,7 @@ jobs:
 
       - name: Update CI Check - Success
         uses: octokit/request-action@v2.x
+        if: needs.test.result == 'success'
         with:
           route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
           repository: ${{ github.repository }}
@@ -98,23 +99,23 @@ jobs:
           conclusion: success
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       - name: Update CI Check - Failure
-#         if: failure()
-#         uses: octokit/request-action@v2.x
-#         with:
-#           route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
-#           repository: ${{ github.repository }}
-#           status: completed
-#           conclusion: success
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       - name: Update CI Check - Cancelled
-#         if: cancelled()
-#         uses: octokit/request-action@v2.x
-#         with:
-#           route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
-#           repository: ${{ github.repository }}
-#           status: completed
-#           conclusion: cancelled
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update CI Check - Failure
+        if: needs.build.result == 'failure' || needs.test.result == 'failure'
+        uses: octokit/request-action@v2.x
+        with:
+          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
+          repository: ${{ github.repository }}
+          status: completed
+          conclusion: success
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update CI Check - Cancelled
+        if: needs.build.result == 'cancelled' || needs.test.result == 'cancelled'
+        uses: octokit/request-action@v2.x
+        with:
+          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
+          repository: ${{ github.repository }}
+          status: completed
+          conclusion: cancelled
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
