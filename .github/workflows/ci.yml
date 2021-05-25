@@ -69,7 +69,6 @@ jobs:
         run: |
           echo "Working 3"
           sleep 5
-          exit 1
 
   check-out:
     name: Check Out
@@ -78,13 +77,6 @@ jobs:
     needs: [check-in, build, test]
 
     steps:
-      - name: Print Job Status
-        run: |
-          echo "${{ needs.check-in.result }}"
-          echo "${{ needs.build.result }}"
-          echo "${{ needs.test.result }}"
-          echo "${{ toJSON(needs.*.result) }}"
-
       - name: Update CI Check - Success
         if: needs.test.result == 'success'
         run: |
@@ -93,14 +85,14 @@ jobs:
             -d '{"status":"completed","conclusion":"success"}'
 
       - name: Update CI Check - Failure
-        if: needs.build.result == 'failure' || needs.test.result == 'failure'
+        if: contains(needs.*.result, 'failure')
         run: |
           curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
             -X PATCH https://api.github.com/repos/${{ github.repository }}/check-runs/${{ github.event.inputs.check_run_id }} \
             -d '{"status":"completed","conclusion":"failure"}'
 
       - name: Update CI Check - Cancelled
-        if: needs.check-in.result == 'cancelled' || needs.build.result == 'cancelled' || needs.test.result == 'cancelled'
+        if: contains(needs.*.result, 'cancelled')
         run: |
           curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
             -X PATCH https://api.github.com/repos/${{ github.repository }}/check-runs/${{ github.event.inputs.check_run_id }} \
