@@ -54,7 +54,6 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     needs: [build]
-    if: cancelled() == false
     steps:
       - name: Run a one-line script
         run: |
