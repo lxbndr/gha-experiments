@@ -95,7 +95,7 @@ jobs:
   check-out:
     name: Check Out
     runs-on: ubuntu-latest
-    if: github.event.inputs.check-run-id && always()
+    if: github.event.inputs.check_run_id && always()
     needs: [build, test]
     
     steps:
