@@ -107,7 +107,7 @@ jobs:
           filename: gha-experiments-main.json
           label: main
           message: success
-          color: green
+          color: brightgreen
 
       - name: Update Badge - Failure
         uses: schneegans/dynamic-badges-action@v1.0.0
@@ -118,4 +118,4 @@ jobs:
           filename: gha-experiments-main.json
           label: main
           message: failure
-          color: red
+          color: critical
