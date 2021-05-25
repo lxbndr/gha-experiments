@@ -86,8 +86,8 @@ jobs:
     steps:
       - name: Print Job Status
         run: |
-          echo "${{ needs.build.outputs.job_status }}"
-          echo "${{ needs.test.outputs.job_status }}"
+          echo "${{ needs.build.result }}"
+          echo "${{ needs.test.result }}"
 
       - name: Update CI Check - Success
         uses: octokit/request-action@v2.x
