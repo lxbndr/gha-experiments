@@ -75,41 +75,33 @@ jobs:
     name: Check Out
     runs-on: ubuntu-latest
     if: github.event.inputs.check_run_id && always()
-    needs: [build, test]
-    
+    needs: [check-in, build, test]
+
     steps:
       - name: Print Job Status
         run: |
+          echo "${{ needs.check-in.result }}"
           echo "${{ needs.build.result }}"
           echo "${{ needs.test.result }}"
+          echo "${{ toJSON(needs.*.result) }}"
 
       - name: Update CI Check - Success
-        uses: octokit/request-action@v2.x
         if: needs.test.result == 'success'
-        with:
-          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
-          repository: ${{ github.repository }}
-          status: completed
-          conclusion: success
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+            -X PATCH https://api.github.com/repos/${{ github.repository }}/check-runs/${{ github.event.inputs.check_run_id }} \
+            -d '{"status":"completed","conclusion":"success"}'
+
       - name: Update CI Check - Failure
         if: needs.build.result == 'failure' || needs.test.result == 'failure'
-        uses: octokit/request-action@v2.x
-        with:
-          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
-          repository: ${{ github.repository }}
-          status: completed
-          conclusion: success
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+            -X PATCH https://api.github.com/repos/${{ github.repository }}/check-runs/${{ github.event.inputs.check_run_id }} \
+            -d '{"status":"completed","conclusion":"failure"}'
+
       - name: Update CI Check - Cancelled
-        if: needs.build.result == 'cancelled' || needs.test.result == 'cancelled'
-        uses: octokit/request-action@v2.x
-        with:
-          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
-          repository: ${{ github.repository }}
-          status: completed
-          conclusion: cancelled
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: needs.check-in.result == 'cancelled' || needs.build.result == 'cancelled' || needs.test.result == 'cancelled'
+        run: |
+          curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+            -X PATCH https://api.github.com/repos/${{ github.repository }}/check-runs/${{ github.event.inputs.check_run_id }} \
+            -d '{"status":"completed","conclusion":"cancelled"}'
