@@ -3,7 +3,7 @@ name: CI
 on:
   workflow_dispatch:
     inputs:
-      check-run-id:
+      check_run_id:
         description: Check Run ID
         required: false
 
@@ -11,9 +11,13 @@ jobs:
   check-in:
     name: Check In
     runs-on: ubuntu-latest
-    if: github.event.inputs.check-run-id
+    if: github.event.inputs.check_run_id
 
     steps:
+      - name: Try cURL
+        run: |
+          curl -s 'https://api.github.com/users/lxbndr' | jq -r '.name'
+
       - name: Get Current Run
         id: get-run
         uses: octokit/request-action@v2.x
@@ -27,7 +31,7 @@ jobs:
       - name: Update CI Check
         uses: octokit/request-action@v2.x
         with:
-          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check-run-id }}
+          route: PATCH /repos/{repository}/check-runs/${{ github.event.inputs.check_run_id }}
           repository: ${{ github.repository }}
           status: in_progress
           details_url: ${{ fromJSON(steps.get-run.outputs.data).html_url }}
