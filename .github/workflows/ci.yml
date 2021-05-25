@@ -73,27 +73,49 @@ jobs:
   check-out:
     name: Check Out
     runs-on: ubuntu-latest
-    if: github.event.inputs.check_run_id && always()
+    if: always()
     needs: [check-in, build, test]
 
     steps:
       - name: Update CI Check - Success
-        if: needs.test.result == 'success'
+        if: github.event.inputs.check_run_id && needs.test.result == 'success'
         run: |
           curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
             -X PATCH https://api.github.com/repos/${{ github.repository }}/check-runs/${{ github.event.inputs.check_run_id }} \
             -d '{"status":"completed","conclusion":"success"}'
 
       - name: Update CI Check - Failure
-        if: contains(needs.*.result, 'failure')
+        if: github.event.inputs.check_run_id && contains(needs.*.result, 'failure')
         run: |
           curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
             -X PATCH https://api.github.com/repos/${{ github.repository }}/check-runs/${{ github.event.inputs.check_run_id }} \
             -d '{"status":"completed","conclusion":"failure"}'
 
       - name: Update CI Check - Cancelled
-        if: contains(needs.*.result, 'cancelled')
+        if: github.event.inputs.check_run_id && contains(needs.*.result, 'cancelled')
         run: |
           curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
             -X PATCH https://api.github.com/repos/${{ github.repository }}/check-runs/${{ github.event.inputs.check_run_id }} \
             -d '{"status":"completed","conclusion":"cancelled"}'
+
+      - name: Update Badge - Success
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        if: github.event.inputs.check_run_id == null && needs.test.result == 'success'
+        with:
+          auth: ${{ secrets.GISTS_TOKEN }}
+          gistID: bb89d69d31409ee5f747bac35a1157d9
+          filename: gha-experiments-main.json
+          label: main
+          message: success
+          color: green
+
+      - name: Update Badge - Failure
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        if: github.event.inputs.check_run_id == null && contains(needs.*.result, 'failure')
+        with:
+          auth: ${{ secrets.GISTS_TOKEN }}
+          gistID: bb89d69d31409ee5f747bac35a1157d9
+          filename: gha-experiments-main.json
+          label: main
+          message: failure
+          color: red
