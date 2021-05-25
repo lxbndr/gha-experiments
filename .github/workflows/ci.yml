@@ -19,9 +19,15 @@ jobs:
           curl -s 'https://api.github.com/users/lxbndr' | jq -r '.name'
   
       - name: Get Current Run (cURL)
+        id: get-run-c
         run: |
-          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-           "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          HTML_URL=$(curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+           'https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}' \
+           | jq -r '.html_url') \
+           && echo '::set-output name=html_url::$HTML_URL'
+
+      - name: Print Result
+        run: echo '${{ steps.get-run-c.outputs.html_url }}'
 
       - name: Get Current Run
         id: get-run
