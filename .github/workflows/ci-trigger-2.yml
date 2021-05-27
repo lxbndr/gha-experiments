@@ -27,11 +27,12 @@ jobs:
     name: Trigger Workflows
 
     runs-on: ubuntu-latest
+    needs: [set-matrix]
     if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/ci test')
 
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.set-matrix.outputs.matrix) }}
 
     steps:
       - name: Print Debug Info
