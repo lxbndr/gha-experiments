@@ -31,12 +31,12 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix: ${{fromJSON(needs.job1.outputs.matrix)}}
+      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
 
     steps:
       - name: Print Debug Info
         run: |
-          echo "${{ toJSON(matrix }}"
+          echo "${{ toJSON(matrix) }}"
 
 #       - name: Fetch Pull Request Info
 #         id: get_pr
