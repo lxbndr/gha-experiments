@@ -83,6 +83,9 @@ jobs:
                 echo "Has zlib - 2"
                 ;;
               
+              /ci | test)
+                ;;
+                
               *)
                 echo "::warning::Unknown token: $COMMENT_TOKEN"
                 ;;
