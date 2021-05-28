@@ -6,7 +6,7 @@ on:
 
 env:
   CONFIGURATION: |
-    { "test" : "value" }
+    { \"test\" : \"value\" }
 
 #   WORKFLOW_DATA: |
 #     {
