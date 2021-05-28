@@ -7,7 +7,7 @@ on:
 env:
   WORKFLOW_DATA: |
     {
-      "icu" : { "check_name": "icu", "workflow_id": "icu.yml" },
+      \"icu\" : { "check_name": "icu", "workflow_id": "icu.yml" },
       "curl" : { "check_name": "curl", "workflow_id": "curl.yml" },
       "libxml2" : { "check_name": "libxml2", "workflow_id": "libxml2.yml" },
       "zlib" : { "check_name": "zlib", "workflow_id": "zlib.yml" },
@@ -29,7 +29,7 @@ jobs:
       - name: Export Configuration
         id: configure
         run: |
-          echo "{{ $env.WORKFLOW_DATA }}"
+          echo "${{ env.WORKFLOW_DATA }}"
           echo "::set-output name=env::${{ env.WORKFLOW_DATA }}"
 
   set-matrix:
