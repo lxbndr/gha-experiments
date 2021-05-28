@@ -72,6 +72,11 @@ jobs:
             ;;
           esac
           
+          echo "All tokens"
+          for COMMENT_TOKEN in $COMMENT_BODY; do
+            echo "$COMMENT_TOKEN"
+          done
+          
           echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
 
   trigger-workflows:
