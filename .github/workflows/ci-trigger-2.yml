@@ -30,59 +30,14 @@ jobs:
             exit 1
           fi
           
-          case "$COMMENT_BODY" in
-            *swift-5.3*)
-            echo "Has swift-5.3"
-            ;;
-          esac
-          
-          case "$COMMENT_BODY" in
-            *swift-5.4*)
-            echo "Has swift-5.4"
-            ;;
-          esac
-          
-          case "$COMMENT_BODY" in
-            *swift-5.5*)
-            echo "Has swift-5.5"
-            ;;
-          esac
-
-          case "$COMMENT_BODY" in
-            *curl*)
-            echo "Has curl"
-            ;;
-          esac
-
-          case "$COMMENT_BODY" in
-            *libxml2*)
-            echo "Has libxml2"
-            ;;
-          esac
-          
-          case "$COMMENT_BODY" in
-            *icu*)
-            echo "Has icu"
-            ;;
-          esac
-          
-          case "$COMMENT_BODY" in
-            *zlib*)
-            echo "Has zlib"
-            ;;
-          esac
-          
+          declare -a MATRIX=()
           for COMMENT_TOKEN in $COMMENT_BODY; do
             case "$COMMENT_TOKEN" in
               
-              swift-5.3)
-                echo "Has swift 5.3 - 2"
+              swift-5.3 | swift-5.4 | swift-5.5 | icu | curl | libxml2 | zlib)
+                MATRIX+="\"$COMMENT_TOKEN\""
                 ;;
-              
-              zlib)
-                echo "Has zlib - 2"
-                ;;
-              
+                            
               /ci | test)
                 ;;
                 
@@ -93,6 +48,7 @@ jobs:
             esac
           done
           
+          echo $MATRIX
           echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
 
   trigger-workflows:
