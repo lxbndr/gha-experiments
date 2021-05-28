@@ -50,7 +50,7 @@ jobs:
             esac
           done
           
-          MATRIX = $(echo ${MATRIX[@]} | tr ' ' ',')
+          MATRIX=$(echo ${MATRIX[@]} | tr ' ' ',')
           echo $MATRIX
           #echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
           echo "::set-output name=matrix::{$MATRIX}"
