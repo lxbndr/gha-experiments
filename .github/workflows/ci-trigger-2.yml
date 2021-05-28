@@ -48,8 +48,10 @@ jobs:
             esac
           done
           
-          echo ${MATRIX[@]} | tr ' ' ','
-          echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
+          $MATRIX = $(${MATRIX[@]} | tr ' ' ',')
+          echo $MATRIX
+          #echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
+          echo "::set-output name=matrix::{$MATRIX}"
 
   trigger-workflows:
     name: Trigger Workflows
