@@ -59,7 +59,7 @@ jobs:
             echo "Has libxml2"
             ;;
           esac
-
+          
           case "$COMMENT_BODY" in
             *icu*)
             echo "Has icu"
@@ -72,9 +72,20 @@ jobs:
             ;;
           esac
           
-          echo "All tokens"
           for COMMENT_TOKEN in $COMMENT_BODY; do
-            echo "$COMMENT_TOKEN"
+            case "$COMMENT_TOKEN" in
+              
+              swift-5.3)
+                echo "Has swift 5.3 - 2"
+                ;;
+              
+              zlib)
+                echo "Has zlib - 2"
+                ;;
+              
+              *)
+                echo "::warning::Unknown token: $COMMENT_TOKEN"
+                ;;
           done
           
           echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
