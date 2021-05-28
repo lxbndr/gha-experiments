@@ -86,6 +86,8 @@ jobs:
               *)
                 echo "::warning::Unknown token: $COMMENT_TOKEN"
                 ;;
+                
+            esac
           done
           
           echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
