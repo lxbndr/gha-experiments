@@ -6,7 +6,7 @@ on:
 
 env:
   CONFIGURATION: |
-    { \"trigger_prefix\" : \"/ci \" }
+    { "trigger_prefix" : "/ci " }
 
 #   WORKFLOW_DATA: |
 #     {
