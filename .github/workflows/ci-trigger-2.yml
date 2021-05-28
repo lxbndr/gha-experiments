@@ -48,7 +48,7 @@ jobs:
             esac
           done
           
-          echo $MATRIX
+          echo ${MATRIX[@]} | tr ' ' ','
           echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
 
   trigger-workflows:
