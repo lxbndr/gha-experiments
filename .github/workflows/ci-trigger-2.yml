@@ -26,14 +26,14 @@ jobs:
     name: Configure
     runs-on: ubuntu-latest
     outputs:
-      env: ${{ fromJSON(steps.configure.outputs.env) }}
+      config: ${{ steps.configure.outputs.config }}
     
     steps:
       - name: Export Configuration
         id: configure
         run: |
           echo "${{ env.CONFIGURATION }}"
-          echo "::set-output name=env::${{ env.CONFIGURATION }}"
+          echo "::set-output name=config::${{ env.CONFIGURATION }}"
 
   set-matrix:
     name: Set Matrix
