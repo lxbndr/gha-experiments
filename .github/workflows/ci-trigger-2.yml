@@ -26,7 +26,7 @@ jobs:
     name: Configure
     runs-on: ubuntu-latest
     outputs:
-      config: ${{ steps.configure.outputs.config }}
+      config: ${{ fromJSON(steps.configure.outputs.config) }}
     
     steps:
       - name: Export Configuration
