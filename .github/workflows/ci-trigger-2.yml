@@ -5,17 +5,20 @@ on:
     types: [created]
 
 env:
-  WORKFLOW_DATA: |
-    {
-      \"icu\" : { "check_name": "icu", "workflow_id": "icu.yml" },
-      "curl" : { "check_name": "curl", "workflow_id": "curl.yml" },
-      "libxml2" : { "check_name": "libxml2", "workflow_id": "libxml2.yml" },
-      "zlib" : { "check_name": "zlib", "workflow_id": "zlib.yml" },
-      "swift-5.3" : { "check_name": "swift-5.3", "workflow_id": "swift-snapshot.yml" },
-      "swift-5.4" : { "check_name": "swift-5.4", "workflow_id": "swift-snapshot.yml" },
-      "swift-5.5" : { "check_name": "swift-5.5", "workflow_id": "swift-snapshot.yml" },
-      "swift-main" : { "check_name": "swift-main", "workflow_id": "swift-snapshot.yml" }
-    }
+  CONFIGURATION: |
+    { "test" : "value" }
+
+#   WORKFLOW_DATA: |
+#     {
+#       \"icu\" : { "check_name": "icu", "workflow_id": "icu.yml" },
+#       "curl" : { "check_name": "curl", "workflow_id": "curl.yml" },
+#       "libxml2" : { "check_name": "libxml2", "workflow_id": "libxml2.yml" },
+#       "zlib" : { "check_name": "zlib", "workflow_id": "zlib.yml" },
+#       "swift-5.3" : { "check_name": "swift-5.3", "workflow_id": "swift-snapshot.yml" },
+#       "swift-5.4" : { "check_name": "swift-5.4", "workflow_id": "swift-snapshot.yml" },
+#       "swift-5.5" : { "check_name": "swift-5.5", "workflow_id": "swift-snapshot.yml" },
+#       "swift-main" : { "check_name": "swift-main", "workflow_id": "swift-snapshot.yml" }
+#     }
 
 jobs:
 
@@ -29,8 +32,8 @@ jobs:
       - name: Export Configuration
         id: configure
         run: |
-          echo "${{ env.WORKFLOW_DATA }}"
-          echo "::set-output name=env::${{ env.WORKFLOW_DATA }}"
+          echo "${{ env.CONFIGURATION }}"
+          echo "::set-output name=env::${{ env.CONFIGURATION }}"
 
   set-matrix:
     name: Set Matrix
