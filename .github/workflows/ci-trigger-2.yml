@@ -35,7 +35,7 @@ jobs:
             case "$COMMENT_TOKEN" in
               
               swift-5.3 | swift-5.4 | swift-5.5 | icu | curl | libxml2 | zlib)
-                MATRIX+="\"$COMMENT_TOKEN\""
+                MATRIX+=("\"$COMMENT_TOKEN\"")
                 ;;
                             
               /ci | test)
