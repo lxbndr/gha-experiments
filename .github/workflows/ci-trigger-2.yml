@@ -29,6 +29,7 @@ jobs:
   
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      matrix_include: ${{ steps.set-matrix.outputs.matrix_include }}
 
     steps:
       - name: Print Debug Info
