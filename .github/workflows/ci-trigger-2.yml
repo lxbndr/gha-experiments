@@ -8,17 +8,17 @@ env:
   CONFIGURATION: |
     { "trigger_prefix" : "/ci " }
 
-#   WORKFLOW_DATA: |
-#     {
-#       \"icu\" : { "check_name": "icu", "workflow_id": "icu.yml" },
-#       "curl" : { "check_name": "curl", "workflow_id": "curl.yml" },
-#       "libxml2" : { "check_name": "libxml2", "workflow_id": "libxml2.yml" },
-#       "zlib" : { "check_name": "zlib", "workflow_id": "zlib.yml" },
-#       "swift-5.3" : { "check_name": "swift-5.3", "workflow_id": "swift-snapshot.yml" },
-#       "swift-5.4" : { "check_name": "swift-5.4", "workflow_id": "swift-snapshot.yml" },
-#       "swift-5.5" : { "check_name": "swift-5.5", "workflow_id": "swift-snapshot.yml" },
-#       "swift-main" : { "check_name": "swift-main", "workflow_id": "swift-snapshot.yml" }
-#     }
+  WORKFLOW_DATA: |
+    {
+      "icu" : { "check_name": "icu", "workflow_id": "icu.yml" },
+      "curl" : { "check_name": "curl", "workflow_id": "curl.yml" },
+      "libxml2" : { "check_name": "libxml2", "workflow_id": "libxml2.yml" },
+      "zlib" : { "check_name": "zlib", "workflow_id": "zlib.yml" },
+      "swift-5.3" : { "check_name": "swift-5.3", "workflow_id": "swift-snapshot.yml" },
+      "swift-5.4" : { "check_name": "swift-5.4", "workflow_id": "swift-snapshot.yml" },
+      "swift-5.5" : { "check_name": "swift-5.5", "workflow_id": "swift-snapshot.yml" },
+      "swift-main" : { "check_name": "swift-main", "workflow_id": "swift-snapshot.yml" }
+    }
 
 jobs:
   set-matrix:
@@ -69,6 +69,7 @@ jobs:
           echo $MATRIX
           #echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
           echo "::set-output name=matrix::{\"workflow\":[$MATRIX]}"
+          echo "::set-output name=matrix_include::${{ env.WORKFLOW_DATA }}"
 
   trigger-workflow:
     name: Trigger Workflow
@@ -81,16 +82,13 @@ jobs:
       fail-fast: false
       matrix:
         ${{ fromJSON(needs.set-matrix.outputs.matrix) }}
-        include:
-          - workflow: zlib
-            check_name: zlib
-            workflow_id: zlib.yml
 
     steps:
       - name: Print Debug Info
         run: |
           echo "${{ toJSON(matrix) }}"
-
+          echo "${{ needs.set-matrix.outputs.matrix_include) }}"
+          
 #       - name: Fetch Pull Request Info
 #         id: get_pr
 #         run: |
