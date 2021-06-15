@@ -79,7 +79,12 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.set-matrix.outputs.matrix) }}
+      matrix:
+        ${{ fromJSON(needs.set-matrix.outputs.matrix) }}
+        include:
+          - workflow: zlib
+            check_name: zlib
+            workflow_id: zlib.yml
 
     steps:
       - name: Print Debug Info
