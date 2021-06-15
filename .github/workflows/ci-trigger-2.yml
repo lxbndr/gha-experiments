@@ -30,7 +30,7 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 #       matrix_include: ${{ steps.set-matrix.outputs.matrix_include }}
-      matrix_include: ${{ env.WORKFLOW_DATA }}
+      workflow_data: ${{ env.WORKFLOW_DATA }}
 
     steps:
       - name: Print Debug Info
