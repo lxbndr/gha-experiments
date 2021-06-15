@@ -29,7 +29,6 @@ jobs:
   
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-#       matrix_include: ${{ steps.set-matrix.outputs.matrix_include }}
       workflow_data: ${{ env.WORKFLOW_DATA }}
 
     steps:
@@ -56,7 +55,9 @@ jobs:
               swift-5.3 | swift-5.4 | swift-5.5 | swift-main | icu | curl | libxml2 | zlib)
                 MATRIX+=("\"$COMMENT_TOKEN\"")
                 ;;
-                            
+              
+              swift-all)
+                MATRIX+=("\"swift-5.3\"" "\"swift-5.4\"" "\"swift-5.5\"" "\"swift-main\"")
               /ci | test)
                 ;;
                 
@@ -69,9 +70,7 @@ jobs:
           
           MATRIX=$(echo ${MATRIX[@]} | tr ' ' ',')
           echo $MATRIX
-          #echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
           echo "::set-output name=matrix::{\"workflow\":[$MATRIX]}"
-          echo "::set-output name=matrix_include::${{ env.WORKFLOW_DATA }}"
 
   trigger-workflow:
     name: Trigger Workflow
