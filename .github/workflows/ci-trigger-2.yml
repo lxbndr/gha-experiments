@@ -58,6 +58,8 @@ jobs:
               
               swift-all)
                 MATRIX+=("\"swift-5.3\"" "\"swift-5.4\"" "\"swift-5.5\"" "\"swift-main\"")
+                ;;
+              
               /ci | test)
                 ;;
                 
