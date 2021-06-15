@@ -87,7 +87,7 @@ jobs:
       - name: Print Debug Info
         run: |
           echo "${{ toJSON(matrix) }}"
-          echo "${{ needs.set-matrix.outputs.matrix_include) }}"
+          echo "${{ needs.set-matrix.outputs.matrix_include }}"
           
 #       - name: Fetch Pull Request Info
 #         id: get_pr
