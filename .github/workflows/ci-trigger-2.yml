@@ -12,9 +12,9 @@ env:
       "libxml2" : { "check_name": "libxml2", "workflow_id": "libxml2.yml" },
       "zlib" : { "check_name": "zlib", "workflow_id": "zlib.yml" },
       "swift-5.3" : { "check_name": "swift-5.3", "workflow_id": "swift-snapshot.yml", "workflow_inputs": ", \"branch-spec\":\"5.3\""},
-      "swift-5.4" : { "check_name": "swift-5.4", "workflow_id": "swift-snapshot.yml" },
-      "swift-5.5" : { "check_name": "swift-5.5", "workflow_id": "swift-snapshot.yml" },
-      "swift-main" : { "check_name": "swift-main", "workflow_id": "swift-snapshot.yml" }
+      "swift-5.4" : { "check_name": "swift-5.4", "workflow_id": "swift-snapshot.yml", "workflow_inputs": ", \"branch-spec\":\"5.4\"" },
+      "swift-5.5" : { "check_name": "swift-5.5", "workflow_id": "swift-snapshot.yml", "workflow_inputs": ", \"branch-spec\":\"5.5\"" },
+      "swift-main" : { "check_name": "swift-main", "workflow_id": "swift-snapshot.yml", "workflow_inputs": ", \"branch-spec\":\"main\"" }
     }
 
 jobs:
@@ -106,22 +106,27 @@ jobs:
         ${{ fromJSON(needs.configure.outputs.matrix) }}
 
     steps:
-      - name: Print Debug Info
-        run: |
-          echo "${{ toJSON(matrix) }}"
-
       - name: Create Check
         id: create_check
         run: |
-          CHECK_RUN_ID=$(curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+          set -e
+          
+          http_code=$(curl -s -o check.json -w "%{http_code}" -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
             -X POST https://api.github.com/repos/${{ github.repository }}/check-runs \
-            -d '{"name":"${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].check_name }}","head_sha":"${{ needs.configure.outputs.head_sha }}"}' \
-            | jq -r '.id') \
-            && echo "::set-output name=check_run_id::$CHECK_RUN_ID"
+            -d '{"name":"${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].check_name }}","head_sha":"${{ needs.configure.outputs.head_sha }}"}')
+          
+          if [ "$http_code" != "201" ]; then
+            echo "::error::Failed to create check"
+            exit 1
+          fi
+          
+          CHECK_RUN_ID=$(jq -r '.id' check.json)
+          
+          echo "Check run ID: $CHECK_RUN_ID"
+          echo "::set-output name=check_run_id::$CHECK_RUN_ID"
 
       - name: Trigger Workflow
         run: |
           curl -s -H 'Authorization: token ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}' \
             https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_id }}/dispatches \
             -d '{"ref":"${{ needs.configure.outputs.head_ref }}","inputs":{"check_run_id":"${{ steps.create_check.outputs.check_run_id }}"${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_inputs }}}}'
-
