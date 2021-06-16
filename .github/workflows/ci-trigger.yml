@@ -1,4 +1,4 @@
-name: CI Trigger 2
+name: CI Trigger
 
 on:
   issue_comment:
