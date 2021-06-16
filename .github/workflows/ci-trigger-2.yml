@@ -73,7 +73,7 @@ jobs:
           for COMMENT_TOKEN in $COMMENT_BODY; do
             case "$COMMENT_TOKEN" in
               
-              swift-5.3 | swift-5.4 | swift-5.5 | swift-main | icu | curl | libxml2 | zlib)
+              swift-5.3 | swift-5.4 | swift-5.5 | swift-main | icu | curl | libxml2 | zlib | ci)
                 MATRIX+=("\"$COMMENT_TOKEN\"")
                 ;;
               
