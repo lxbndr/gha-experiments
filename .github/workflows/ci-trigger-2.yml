@@ -94,7 +94,7 @@ jobs:
           http_code=$(curl -s -o pr.json -w "%{http_code}" -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
             https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }})
           
-          if [ $httpCode != 201 ]; then
+          if [ "$http_code" != "201" ]; then
             echo "::error::Failed to fetch PR ${{ github.event.issue.number }}"
             exit 1
           fi
