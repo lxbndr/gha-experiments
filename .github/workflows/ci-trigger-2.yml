@@ -92,7 +92,7 @@ jobs:
           set -e
           
           http_code=$(curl -s -o pr.json -w "%{http_code}" -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
-            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}))
+            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }})
           
           HEAD_SHA=$(jq -r '.head.sha' pr.json)
           HEAD_REF=$(jq -r '.head.ref' pr.json)
