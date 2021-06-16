@@ -106,7 +106,7 @@ jobs:
         ${{ fromJSON(needs.configure.outputs.matrix) }}
 
     steps:
-      - name: Create Check
+      - name: Create Check Run
         id: create_check
         run: |
           set -e
@@ -129,12 +129,25 @@ jobs:
         run: |
           set -e
           
-          http_code=$(curl -s -H 'Authorization: token ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}' \
+          http_code=$(curl -s -w "%{http_code}" -H 'Authorization: token ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}' \
             https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_id }}/dispatches \
             -d '{"ref":"${{ needs.configure.outputs.head_ref }}","inputs":{"check_run_id":"${{ steps.create_check.outputs.check_run_id }}"${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_inputs }}}}')
           
-          echo $http_code
           if [ "$http_code" != "204" ]; then
             echo "::error::Failed to start workflow"
+            exit 1
+          fi
+
+      - name: Update Check Run
+        if: failure()
+        run: |
+          set -e
+          
+          http_code=$(curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+            -X PATCH https://api.github.com/repos/${{ github.repository }}/check-runs/${{ steps.create_check.outputs.check_run_id }} \
+            -d '{"conclusion":"failure"}')
+          
+          if [ "$http_code" != "200" ]; then
+            echo "::error::Failed to update check run"
             exit 1
           fi
