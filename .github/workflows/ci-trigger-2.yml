@@ -58,11 +58,11 @@ jobs:
               
               /ci | test)
                 ;;
-                
+              
               *)
                 echo "::warning::Unknown token: $COMMENT_TOKEN"
                 ;;
-                
+              
             esac
           done
           
@@ -89,12 +89,16 @@ jobs:
       - name: Fetch Pull Request Info
         id: get_pr
         run: |
-          PR_INFO=$(curl -s -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
-            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}) \
-            && HEAD_SHA=$(echo $PR_INFO | jq -r '.head.sha') \
-            && HEAD_REF=$(echo $PR_INFO | jq -r '.head.ref') \
-            && echo "::set-output name=head_sha::$HEAD_SHA" \
-            && echo "::set-output name=head_ref::$HEAD_REF"
+          set -e
+          
+          http_code=$(curl -s -o pr.json -w "%{http_code}" -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}))
+          
+          HEAD_SHA=$(jq -r '.head.sha' pr.json)
+          HEAD_REF=$(jq -r '.head.ref' pr.json)
+          
+          echo "::set-output name=head_sha::$HEAD_SHA"
+          echo "::set-output name=head_ref::$HEAD_REF"
 
       - name: Create Check
         id: create_check
