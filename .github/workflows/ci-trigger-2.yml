@@ -115,6 +115,7 @@ jobs:
             -X POST https://api.github.com/repos/${{ github.repository }}/check-runs \
             -d '{"name":"${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].check_name }}","head_sha":"${{ needs.configure.outputs.head_sha }}"}')
           
+          echo $http_code
           if [ "$http_code" != "201" ]; then
             echo "::error::Failed to create check"
             exit 1
