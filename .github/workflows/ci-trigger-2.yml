@@ -134,7 +134,7 @@ jobs:
             -d '{"ref":"${{ needs.configure.outputs.head_ref }}","inputs":{"check_run_id":"${{ steps.create_check.outputs.check_run_id }}"${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_inputs }}}}')
           
           echo $http_code
-          if [ "$http_code" != "201" ]; then
+          if [ "$http_code" != "204" ]; then
             echo "::error::Failed to start workflow"
             exit 1
           fi
