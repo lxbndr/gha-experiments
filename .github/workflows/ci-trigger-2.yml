@@ -147,6 +147,7 @@ jobs:
             -X PATCH https://api.github.com/repos/${{ github.repository }}/check-runs/${{ steps.create_check.outputs.check_run_id }} \
             -d '{"conclusion":"failure"}')
           
+          echo $http_code
           if [ "$http_code" != "200" ]; then
             echo "::error::Failed to update check run"
             exit 1
