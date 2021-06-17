@@ -141,7 +141,7 @@ jobs:
 
       - name: Update Badge - Success
         uses: schneegans/dynamic-badges-action@v1.0.0
-        if: github.ref == 'origin/main' && needs.test.result == 'success'
+        if: github.ref == 'refs/heads/main' && needs.test.result == 'success'
         with:
           auth: ${{ secrets.GISTS_TOKEN }}
           gistID: bb89d69d31409ee5f747bac35a1157d9
@@ -152,7 +152,7 @@ jobs:
 
       - name: Update Badge - Failure
         uses: schneegans/dynamic-badges-action@v1.0.0
-        if: github.ref == 'origin/main' && contains(needs.*.result, 'failure')
+        if: github.ref == 'refs/heads/main' && contains(needs.*.result, 'failure')
         with:
           auth: ${{ secrets.GISTS_TOKEN }}
           gistID: bb89d69d31409ee5f747bac35a1157d9
