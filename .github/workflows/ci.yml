@@ -71,7 +71,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     needs: [build]
-    if: cancelled() == false && needs.build.result == 'success'
+    if: success() && needs.build.result == 'success'
     steps:
       - name: Run a one-line script
         run: |
