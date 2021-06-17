@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Print Debug Info
-        run: echo "${{ fromJSON(env.WORKFLOW_DATA).* }}"
+        run: echo "${{ toJSON(fromJSON(env.WORKFLOW_DATA).*) }}"
 
       - name: Fetch Pull Request Info
         id: get_pr
