@@ -86,7 +86,6 @@ jobs:
           sleep 5
 
       - name: Run a one-line script
-        if: success() && cancelled() == false
         run: |
           echo "Working 3"
           sleep 5
