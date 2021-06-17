@@ -92,7 +92,7 @@ jobs:
           done
           
           MATRIX=$(echo ${MATRIX[@]} | tr ' ' ',')
-          echo $MATRIX
+          echo "Build matrix: $MATRIX"
           echo "::set-output name=matrix::{\"workflow\":[$MATRIX]}"
 
   trigger-workflow:
