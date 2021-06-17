@@ -147,7 +147,7 @@ jobs:
         with:
           auth: ${{ secrets.GISTS_TOKEN }}
           gistID: bb89d69d31409ee5f747bac35a1157d9
-          filename: gha-experiments-main.json
+          filename: _gha-experiments-main.json
           label: main
           message: success
           color: success
