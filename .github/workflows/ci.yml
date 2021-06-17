@@ -74,19 +74,19 @@ jobs:
     if: cancelled() == false && needs.build.result == 'success'
     steps:
       - name: Run a one-line script
-        if: cancelled() == false
+        if: success() && cancelled() == false
         run: |
           echo "Working"
           sleep 5
 
       - name: Run a one-line script
-        if: cancelled() == false
+        if: success() && cancelled() == false
         run: |
           echo "Working 2"
           sleep 5
 
       - name: Run a one-line script
-        if: cancelled() == false
+        if: success() && cancelled() == false
         run: |
           echo "Working 3"
           sleep 5
