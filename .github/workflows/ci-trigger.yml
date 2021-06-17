@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Print Debug Info
-        run: echo "${{ github.event.comment.author_association }}"
+        run: echo "${{ fromJSON(env.WORKFLOW_DATA).* }}"
 
       - name: Fetch Pull Request Info
         id: get_pr
