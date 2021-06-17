@@ -62,8 +62,6 @@ jobs:
           AUTHOR_ASSOCIATION: ${{ github.event.comment.author_association }}
           COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
-          set -x
-          
           if [ "$AUTHOR_ASSOCIATION" != "COLLABORATOR" ] && [ "$AUTHOR_ASSOCIATION" != "OWNER" ]; then
             echo "::error::Only collaborators or owner could request this action"
             exit 1
