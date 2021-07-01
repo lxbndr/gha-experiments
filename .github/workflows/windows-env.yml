@@ -16,7 +16,7 @@ jobs:
       - name: Run a one-line script
         run: |
           echo Start...
-          dir "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC"
+          :: dir "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC"
           dir %TEMP%
           
           echo Running installer...
@@ -28,5 +28,5 @@ jobs:
            
           echo Result: %ERRORLEVEL%
           
-          dir "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC"
-          dir %TEMP%
+          :: dir "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC"
+          type %TEMP%\dd_*
