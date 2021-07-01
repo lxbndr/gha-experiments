@@ -28,6 +28,8 @@ jobs:
           echo Result: %ERRORLEVEL%
           
           cd "%ProgramFiles(x86)%\Microsoft Visual Studio"
+          echo %cd%
           dir "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC"
+          
           dir /s *14.*
-          type %TEMP%\dd_*
+          :: type %TEMP%\dd_*
