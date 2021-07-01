@@ -23,6 +23,12 @@ jobs:
           cmd.exe /d /e:on /v:off /s /c ""%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vs_installer.exe" modify --quiet --norestart --nocache --installPath="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise" --add Microsoft.VisualStudio.Component.VC.14.28.16.9.x86.x64 --add Microsoft.VisualStudio.Component.VC.14.28.16.9.ATL"
           echo Result: %ERRORLEVEL%
           
+          :check_setup
+          echo Waiting for setup process...
+          ping -n 5 127.0.0.1 >NUL
+          tasklist | find /I "setup.exe"
+          if not errorlevel 1 goto check_setup
+          
           :check_vc_dir
           dir /b /s "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29910\lib\x64\vccorlib.lib"
           if errorlevel 1 goto wait
