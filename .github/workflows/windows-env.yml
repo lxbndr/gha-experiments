@@ -27,10 +27,15 @@ jobs:
            
           echo Result: %ERRORLEVEL%
           
-          cd /d "%ProgramFiles(x86)%\Microsoft Visual Studio"
-          echo %cd%
+          :check_vc_dir
+          dir /b /s "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.*"
+          if errorlevel 1 goto wait
+          echo Success
+          exit /b
           
-          dir "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC"
+          :wait
+          echo Waiting...
+          timeout 60 /nobreak
+          goto check_vc_dir
           
-          dir /s *14.*
           :: type %TEMP%\dd_*
