@@ -26,7 +26,7 @@ jobs:
           :check_setup
           tasklist | find /I "setup.exe" > nul
           if not errorlevel 1 (
-            echo "Waiting for setup to complete"
+            echo Waiting for setup to complete...
             ping -n 10 127.0.0.1 > nul
             goto check_setup
           )
