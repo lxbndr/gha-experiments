@@ -29,6 +29,8 @@ jobs:
           
           cd "%ProgramFiles(x86)%\Microsoft Visual Studio"
           echo %cd%
+          cd
+          
           dir "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC"
           
           dir /s *14.*
