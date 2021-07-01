@@ -28,13 +28,13 @@ jobs:
           echo Result: %ERRORLEVEL%
           
           :check_vc_dir
-          dir /b /s "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.*"
+          dir /b /s "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\lib\x64\vccorlib.lib"
           if errorlevel 1 goto wait
           echo Success
           exit /b
           
           :wait
-          dir /b /s "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\lib\x64\*"
+          dir /b /s "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\*"
           echo Waiting...
           ping -n 60 127.0.0.1 >NUL
           goto check_vc_dir
