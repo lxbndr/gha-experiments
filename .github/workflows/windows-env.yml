@@ -35,7 +35,7 @@ jobs:
           
           :wait
           echo Waiting...
-          timeout 60 /nobreak
+          ping -n 60 127.0.0.1 >NUL
           goto check_vc_dir
           
           :: type %TEMP%\dd_*
