@@ -17,9 +17,16 @@ jobs:
         run: |
           echo Start...
           dir "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC"
+          dir %TEMP%
           
           echo Running installer...
-          "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vs_installer.exe" modify --installPath="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise" --add Microsoft.VisualStudio.Component.VC.14.28.16.9.x86.x64;includeRecommended;includeOptional --add Microsoft.VisualStudio.Component.VC.14.28.16.9.ATL;includeRecommended;includeOptional --quiet --norestart --wait
+          "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vs_installer.exe" ^
+           --installPath="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise" ^
+           --add Microsoft.VisualStudio.Component.VC.14.28.16.9.x86.x64;includeRecommended;includeOptional ^
+           --add Microsoft.VisualStudio.Component.VC.14.28.16.9.ATL;includeRecommended;includeOptional ^
+           --quiet --norestart --wait
+           
           echo Result: %ERRORLEVEL%
           
           dir "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC"
+          dir %TEMP%
