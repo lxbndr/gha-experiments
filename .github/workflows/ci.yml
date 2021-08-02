@@ -150,7 +150,7 @@ jobs:
           fi
 
       - name: Update Badge - Success
-        uses: schneegans/dynamic-badges-action@v1.0.0
+        uses: schneegans/dynamic-badges-action@v1
         if: github.ref == 'refs/heads/main' && needs.test.result == 'success'
         with:
           auth: ${{ secrets.GISTS_TOKEN }}
