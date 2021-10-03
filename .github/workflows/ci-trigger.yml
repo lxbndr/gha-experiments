@@ -140,13 +140,9 @@ jobs:
             RUNS_ON=', "runs_on":"${{ needs.configure.outputs.runner }}"'
           fi
           
-          #http_code=$(curl -s -w "%{http_code}" -H 'Authorization: token ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}' \
-          #  https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_id }}/dispatches \
-          #  -d '{"ref":"${{ needs.configure.outputs.head_ref }}","inputs":{"check_run_id":"${{ steps.create_check.outputs.check_run_id }}"${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_inputs }}'"$RUNS_ON"'}}')
-          
-          curl -s -w "%{http_code}" -H 'Authorization: token ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}' \
+          http_code=$(curl -s -w "%{http_code}" -H 'Authorization: token ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}' \
             https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_id }}/dispatches \
-            -d '{"ref":"${{ needs.configure.outputs.head_ref }}","inputs":{"check_run_id":"${{ steps.create_check.outputs.check_run_id }}"${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_inputs }}'"$RUNS_ON"'}}'
+            -d '{"ref":"${{ needs.configure.outputs.head_ref }}","inputs":{"check_run_id":"${{ steps.create_check.outputs.check_run_id }}"${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_inputs }}'"$RUNS_ON"'}}')
 
       - name: Update Check Run
         if: failure()
