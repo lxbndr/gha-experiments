@@ -1,6 +1,8 @@
 name: icu
 
 on:
+  workflow_call:
+
   workflow_dispatch:
     inputs:
       check_run_id:
