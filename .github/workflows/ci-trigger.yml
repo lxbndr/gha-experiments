@@ -145,7 +145,7 @@ jobs:
 #             -d '{"ref":"${{ needs.configure.outputs.head_ref }}","inputs":{"check_run_id":"${{ steps.create_check.outputs.check_run_id }}"${{ fromJSON(env.WORKFLOW_DATA)[matrix.workflow].workflow_inputs }}'"$RUNS_ON"'}}')
       
       - name: Trigger Workflow
-        uses: ./.github/workflow/icu.yml
+        uses: .github/workflow/icu.yml@main
 
       - name: Update Check Run
         if: failure()
